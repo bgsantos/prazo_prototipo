@@ -2,3 +2,5 @@ TODO
 .direnv
 .vscode
 *.pyc
+logs/*
+!logs/.gitkeep

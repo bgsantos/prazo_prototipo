@@ -1,16 +1,19 @@
 from bs4 import BeautifulSoup
 from tools.logger import createLog
-from dtos.dorj_dto import DtoDORJAtosProcurador, DtoDORJDecisoes
+from dtos.dorj_dto import DTODorjAtosProcurador, DTODorjDecisoesConselho
 from datetime import datetime
 
 class DORJ():
+    """
+    Realiza a extração de informações contidas no Diário Oficial do Estado do Rio.
+    """
     def __init__(self, html):
         self.html = html
         self.soup = BeautifulSoup(html, 'html.parser')
 
     def getDataEdicao(self):
         """
-        Retorna a data da edição do Diário Oficial
+        Retorna a data da edição do Diário Oficial.
         """
         anchor = self.soup.find(attrs={"class": "ft13"})
         date = anchor.next_sibling.next_sibling 
@@ -18,7 +21,7 @@ class DORJ():
     
     def getAtosProcurador(self):
         """
-        Retorna uma lista com os DTOs referentes aos Atos do Procurador-Geral
+        Retorna uma lista com os DTOs referentes aos Atos do Procurador-Geral.
         """
         anchors = self.soup.find_all(attrs={"class": "ft110"})
         
@@ -57,7 +60,7 @@ class DORJ():
                 currentType = "newLine"
                 createLog('debug', currentType + '||' + currentEl.get_text())
 
-                dto_rj = DtoDORJAtosProcurador(currentData, currentEl.get_text())
+                dto_rj = DTODorjAtosProcurador(currentData, currentEl.get_text())
                 AtosList.append(dto_rj)
 
                 currentEl = currentEl.next_sibling.next_sibling
@@ -67,25 +70,27 @@ class DORJ():
                 shouldContinue = False
             
         return AtosList
-
                 
     def getDecisoes(self):
+        """
+        Retorna lista com decisões tomadas pelo Conselho.
+        """
         anchor = self.soup.find_all(attrs={"class": "ft19"})[-1]
         if(len(anchor.get_text()) != 39):
             print("Não foi possível encontrar a ancora")
             return False
         
-        #iterar até o final do arquivo para descobrir quais linhas começam com processo
         lineBreakIndicators = [['ft119'],['ft120'], ['ft121'],['ft219'],['ft220'], ['ft221'], ['ft222'], ['ft319'] ,['ft320'], ['ft321'],['ft322']]
         currentEl = anchor.next_sibling.next_sibling
         currentPage = 1
         DecisoesList = []
+
         while currentEl:
             if "Processo" in currentEl.get_text() and "nº" in currentEl.get_text():
                 numberPos = currentEl.get_text().find('nº') 
                 number = currentEl.get_text()[numberPos+2:numberPos+16]
                 
-                DecisoesList.append(DtoDORJDecisoes(number, currentEl.get_text()[numberPos+17:]))
+                DecisoesList.append(DTODorjDecisoesConselho(number, currentEl.get_text()[numberPos+17:]))
                 createLog('debug', "Novo Processo || {}".format(currentEl.get_text()))
 
             elif currentEl['class'] in lineBreakIndicators:
@@ -94,19 +99,21 @@ class DORJ():
 
             currentEl = currentEl.next_sibling.next_sibling
             if currentEl == None:
-                print("Chegamos ao final da página")
+                print("Final da página")
                 currentPage += 1
                 page = self.soup.find(id="page{}-div".format(str(currentPage)))
+
                 if page == None:
                     print("Final do documento")
                     return DecisoesList
 
                 currentEl = page.find('p')
         
-        
-        
     def isHtmlValid(self, html = None):
+        """
+        Valida o html com base nas formatações implementadas.
+        """
         if html == None:
             html = self.html
         
-        raise(Exception("Not implemented yet."))
+        raise NotImplementedError()

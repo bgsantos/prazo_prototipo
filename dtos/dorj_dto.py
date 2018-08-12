@@ -1,4 +1,4 @@
-class DtoDORJAtosProcurador():
+class DTODorjAtosProcurador():
     def __init__(self, date, content):
         self.date = date
         self.content = content
@@ -9,7 +9,7 @@ class DtoDORJAtosProcurador():
             self.content
         )
 
-class DtoDORJDecisoes():
+class DTODorjDecisoesConselho():
     def __init__(self,process_number, content):
         self.process_number = process_number
         self.content = content

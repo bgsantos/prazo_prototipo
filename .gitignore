@@ -4,3 +4,5 @@ TODO
 *.pyc
 logs/*
 !logs/.gitkeep
+csv/*
+!csv/.gitkeep

@@ -1,5 +1,7 @@
 from bs4 import BeautifulSoup
 import requests
+import csv
+from settings import CSV_DIR
 from tools.logger import createLog
 from dtos.jornaljurid_dto import DTOJornalJuridHeaders
 
@@ -67,6 +69,22 @@ class JornalJurid():
         elif soup.find(class_="header-view") != None:
             body = soup.find(class_="header-view").find('p').text
             return body
-
         
-         
+    @classmethod
+    def generateNewsCSV(cls, news):
+        c = csv.writer(open(CSV_DIR + '/news.csv', 'w', encoding= "ISO-8859-1"))
+        c.writerow(["id", "data", "title", "link", "body"])
+
+        for n in news:
+            try:
+                body =n['body']
+            except:
+                body = ""
+
+            c.writerow([
+                n['_id'],
+                n['date'],
+                n['title'],
+                n['link'],
+                body
+            ])

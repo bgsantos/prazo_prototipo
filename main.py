@@ -1,6 +1,6 @@
 from parsers.diario_oficial import DORJ
 from parsers.jornaljurid_com import JornalJurid
-from settings import BASE_DIR
+from settings import BASE_DIR, CSV_DIR
 from mongo_repository import AtosRepository, DecisoesRepository, JornalJuridRepository
 
 """ === Diário Oficial Rio de Janeiro 10/08/2018 === """
@@ -9,7 +9,7 @@ file = open(BASE_DIR+'/static/dorj.html', 'rb')
 dorj = DORJ(file.read())
 
 # Data da edição
-print(dorj.getDataEdicao())
+# print(dorj.getDataEdicao())
 
 # dorj.getDecisoes()
 
@@ -38,14 +38,19 @@ print(dorj.getDataEdicao())
 # for a in allActs: 
 #     AtosRepository.saveAtoProcurador(a)
 
-jd = JornalJurid('jurisprudencia')
+# jd = JornalJurid('jurisprudencia')
 
-for h in jd.fetchNewsHeaders():
-    JornalJuridRepository.saveNewsHeaders(h)
+# for h in jd.fetchNewsHeaders():
+#     JornalJuridRepository.saveNewsHeaders(h)
 
-for h in JornalJuridRepository.getNewsHeaders():
-    text = JornalJurid.getNewsBody(h['link'])
-    print(JornalJuridRepository.setNewsBody(h['link'], text))
+# for h in JornalJuridRepository.getNews():
+#     text = JornalJurid.getNewsBody(h['link'])
+#     print(JornalJuridRepository.setNewsBody(h['link'], text))
 
-JornalJuridRepository.getNewsCSV()
+#Gerar CSV para news
+# JornalJurid.generateNewsCSV(JornalJuridRepository.getNews())
 
+
+#gerar csv para atos
+DecisoesRepository.createCSV(CSV_DIR + '/decisoes.csv')
+AtosRepository.createCSV(CSV_DIR + '/atos.csv')

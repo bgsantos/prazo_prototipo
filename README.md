@@ -6,7 +6,9 @@ Rotina para extração de informações estruturadas de pdfs e portais.
 Setup
 --------
 
-Alterar no arquivo **.env** a variável DB_NAME para o nome do banco de dados a utilizado.
+Alterar no arquivo **.env** a variável DB_NAME para o nome do banco de dados a ser utilizado.
+O arquivo **requirements.txt** possui os módulos necessários para execução do programa. A instalação 
+pode ser realizada com o comando ```pip install -r requirements.txt```.
 
 Execução dos Testes
 ------------

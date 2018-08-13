@@ -66,7 +66,7 @@ class DORJ():
                 currentEl = currentEl.next_sibling.next_sibling
 
             else:
-                print("Eu não me encaixo nas definições:" + str(currentEl))
+                # print("Elemento não se encaixa nas definições:" + str(currentEl))
                 shouldContinue = False
             
         return AtosList

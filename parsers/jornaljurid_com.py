@@ -6,6 +6,9 @@ from tools.logger import createLog
 from dtos.jornaljurid_dto import DTOJornalJuridHeaders
 
 class JornalJurid():
+    """
+    Classe responsável pela extração de informações do portal jornaljurid.com.br
+    """
     baseUrl = "https://www.jornaljurid.com.br"
 
     def __init__(self, category, subcategory = None):
@@ -28,6 +31,9 @@ class JornalJurid():
         self.soup = BeautifulSoup(r.text, 'html.parser', from_encoding="ISO-8859-1")
 
     def fetchNewsHeaders(self):
+        """
+        Retorna os títulos e links das notícias
+        """
         resultList = self.soup.find_all(class_="search-result-list")
         headers = []
 
